@@ -87,10 +87,9 @@ plot(t,linPos);
 hold on 
 plot(t,departX(:,1));
 hold off
-title('Lagrange Point 2 pertubation vs linearized motion')
 xlabel('t')
 ylabel('Pos')
-legend('linear','perturbed')
+legend('linear','')
 
 
 %% Lagrange Point 4
