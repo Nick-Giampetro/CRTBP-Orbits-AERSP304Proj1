@@ -76,12 +76,12 @@ exportgraphics(ax,'L2_Nframe.jpg')
 figure
 subplot(2,1,1)
 plot (t, departX(:,1))
-title('Lagrange Point 2 pertubation position')
+title('Lagrange Point 2 perturbation position')
 xlabel('t')
 ylabel('delta x')
 subplot(2,1,2)
 plot (t, departX(:,2))
-title('Lagrange Point 2 pertubation velocity')
+title('Lagrange Point 2 perturbation velocity')
 xlabel('t')
 ylabel('delta x')
 ax = gca ;
@@ -93,7 +93,7 @@ plot(t,linPos);
 hold on 
 plot(t,departX(:,1));
 hold off
-title('Lagrange Point 2 pertubation vs linearized motion')
+title('Lagrange Point 2 perturbation vs linearized motion')
 xlabel('t')
 ylabel('Pos')
 legend('linear','perturbed')
