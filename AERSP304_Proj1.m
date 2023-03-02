@@ -40,7 +40,7 @@ Uxx = 1 - ((1-MU1)/(p1^3)) + (3*(1-MU1)*(xlin+MU1)^2)/(p1^5) + (3*MU1*(-xlin-MU1
 Uyy = 1 - (1-MU1)/(p1^3) + (3*(1-MU1)*ylin^2)/(p1^5) - (MU1)/(p2^3) + (3*MU1*ylin^2)/(p2^5);
 Uxy = (3*(1-MU1)*(xlin+MU1)*ylin)/(p1^5) - (3*MU1*ylin*(-xlin-MU1+1))/(p2^5);
  
- A = [0 0 1 0; 0 0 0 1; Uxx Uxy 0 2; Uxy Uyy -2 0];
+A = [0 0 1 0; 0 0 0 1; Uxx Uxy 0 2; Uxy Uyy -2 0];
 [eigvec eigval] = eig(A);
 const = eigvec\perturbation;
 
@@ -49,26 +49,27 @@ for i = 1:pnts
     xlin = (const(1)*eigvec(:,1)*exp(eigval(1,1)*t(i))) + (const(2)*eigvec(:,2)*exp(eigval(2,2)*t(i))) + (const(3)*eigvec(:,3)*exp(eigval(3,3)*t(i))) + (const(4)*eigvec(:,4)*exp(eigval(4,4)*t(i)))
 end
 
+% plots nominal for L2 in B frame
 figure
 plot(x(:,1),x(:,2));
 title('yN(t) vs. xN(t), Nominal, Lagrange Point 2');
 xlabel('xN(t)');
 ylabel('yN(t)');
 
+% plots L2 in inertial frame
 figure
 plot(XI,YI)
 title('Lagrange Point 2 in Inertial Frame')
 xlabel('XN(t)');
 ylabel('YN(t)');
 
+% plots the perturbed case delta x for both position and velocity for L4
 figure
 subplot(2,1,1)
-
 plot (t, departX(:,1))
 title('Lagrange Point 2 pertubation position')
 xlabel('t')
 ylabel('delta x')
-
 subplot(2,1,2)
 plot (t, departX(:,2))
 title('Lagrange Point 2 pertubation velocity')
@@ -105,32 +106,34 @@ end
 % Linearize
 
 
+% plots nominal for L4 in B frame
 figure
 plot(x(:,1),x(:,2))
 title('yN(t) vs. xN(t), Nominal, Lagrange Point 4');
 xlabel('xN(t)');
 ylabel('yN(t)');
 
+% plots L4 in inertial frame
 figure
 plot(XI,YI)
 title('Lagrange Point 4 in Inertial Frame')
 xlabel('XN(t)');
 ylabel('YN(t)');
 
+% plots the perturbed case delta x for both position and velocity for L4
 figure
 subplot(2,1,1)
 plot (t, departX(:,1))
 title('Lagrange Point 4 pertubation position')
 xlabel('t')
 ylabel('delta x')
-
 subplot(2,1,2)
 plot (t, departX(:,2))
 title('Lagrange Point 4 pertubation velocity')
 xlabel('t')
 ylabel('delta x')
 
-figure
+
 
 %% Functions
 
