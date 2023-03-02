@@ -79,13 +79,14 @@ plot (t, departX(:,1))
 title('Lagrange Point 2 perturbation position')
 xlabel('t')
 ylabel('delta x')
+exportgraphics(ax,'L2_PerturbedPos.jpg')
 subplot(2,1,2)
 plot (t, departX(:,2))
 title('Lagrange Point 2 perturbation velocity')
 xlabel('t')
 ylabel('delta x')
 ax = gca ;
-exportgraphics(ax,'L2_Perturbed.jpg')
+exportgraphics(ax,'L2_PerturbedVel.jpg')
 
 % linear comparison plot
 figure
@@ -154,13 +155,14 @@ plot (t, departX(:,1))
 title('Lagrange Point 4 pertubation position')
 xlabel('t')
 ylabel('delta x')
+exportgraphics(ax,'L4_PerturbedPos.jpg')
 subplot(2,1,2)
 plot (t, departX(:,2))
 title('Lagrange Point 4 pertubation velocity')
 xlabel('t')
 ylabel('delta x')
 ax = gca ;
-exportgraphics(ax,'L4_Perturbed.jpg')
+exportgraphics(ax,'L4_PerturbedVel.jpg')
 
 
 
