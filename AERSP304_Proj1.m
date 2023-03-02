@@ -60,6 +60,8 @@ plot(x(:,1),x(:,2));
 title('yN(t) vs. xN(t), Nominal, Lagrange Point 2');
 xlabel('xN(t)');
 ylabel('yN(t)');
+ax = gca ;
+exportgraphics(ax,'L2_Bframe.jpg')
 
 % plots L2 in inertial frame
 figure
@@ -67,6 +69,8 @@ plot(XI,YI)
 title('Lagrange Point 2 in Inertial Frame')
 xlabel('XN(t)');
 ylabel('YN(t)');
+ax = gca ;
+exportgraphics(ax,'L2_Nframe.jpg')
 
 % plots the perturbed case delta x for both position and velocity for L4
 figure
@@ -80,6 +84,8 @@ plot (t, departX(:,2))
 title('Lagrange Point 2 pertubation velocity')
 xlabel('t')
 ylabel('delta x')
+ax = gca ;
+exportgraphics(ax,'L2_Perturbed.jpg')
 
 % linear comparison plot
 figure
@@ -91,6 +97,8 @@ title('Lagrange Point 2 pertubation vs linearized motion')
 xlabel('t')
 ylabel('Pos')
 legend('linear','perturbed')
+ax = gca ;
+exportgraphics(ax,'L2_Linear.jpg')
 
 
 %% Lagrange Point 4
@@ -127,6 +135,8 @@ plot(x(:,1),x(:,2))
 title('yN(t) vs. xN(t), Nominal, Lagrange Point 4');
 xlabel('xN(t)');
 ylabel('yN(t)');
+ax = gca ;
+exportgraphics(ax,'L4_Bframe.jpg')
 
 % plots L4 in inertial frame
 figure
@@ -134,6 +144,8 @@ plot(XI,YI)
 title('Lagrange Point 4 in Inertial Frame')
 xlabel('XN(t)');
 ylabel('YN(t)');
+ax = gca ;
+exportgraphics(ax,'L4_Nframe.jpg')
 
 % plots the perturbed case delta x for both position and velocity for L4
 figure
@@ -147,6 +159,8 @@ plot (t, departX(:,2))
 title('Lagrange Point 4 pertubation velocity')
 xlabel('t')
 ylabel('delta x')
+ax = gca ;
+exportgraphics(ax,'L4_Perturbed.jpg')
 
 
 
