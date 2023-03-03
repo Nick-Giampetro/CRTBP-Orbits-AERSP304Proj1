@@ -1,6 +1,4 @@
 # 304Proj1
 AERSP 304 Project 1
 
-just setting this up as a test more than anything
-
-And yes i put the final report doc in here fight me about it
+MATLAB Program that Numerically analyzes Lynapunov Orbits at L2 and L4 in the Earth-Moon system.
