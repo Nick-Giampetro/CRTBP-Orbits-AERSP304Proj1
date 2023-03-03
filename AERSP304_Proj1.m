@@ -21,15 +21,16 @@ YI(i) = sin(t(i))*x(i,1)+cos(t(i))*x(i,2);
 end
 
 % Perturbed Solution
+initP = x0+perturbation';
 options = odeset('reltol',1e-12,'abstol',1e-12);
-[t,xP] = ode45(@(t,x) odefun(t,x,MU1), t, x0+perturbation' , options);
+[t,xP] = ode45(@(t,x) odefun(t,x,MU1), t, initP, options);
 xP = x - xP ;
 departX(:,1) = sqrt(xP(:,1).^2+xP(:,2).^2);
 departX(:,2) = sqrt(xP(:,3).^2+xP(:,4).^2);
 
 
 % linearized
-[linPos,linVel] = linearizer(1.15568, 0, t, MU1, pnts, perturbation) ;
+[linPos,linVel] = linearizer(initP(1), initP(2), t, MU1, pnts, perturbation) ;
  
 
 % plots nominal for L2 in B frame
@@ -110,14 +111,15 @@ YI(i) = sin(t(i))*x(i,1)+cos(t(i))*x(i,2);
 end
 
 % Perturbed Solution
+initP = x0'+perturbation';
 options = odeset('reltol',1e-12,'abstol',1e-12);
-[t,xP] = ode45(@(t,x) odefun(t,x,MU1), t, x0'+perturbation' , options);
+[t,xP] = ode45(@(t,x) odefun(t,x,MU1), t, initP , options);
 xP = x - xP ;
 departX(:,1) = sqrt(xP(:,1).^2+xP(:,2).^2);
 departX(:,2) = sqrt(xP(:,3).^2+xP(:,4).^2);
 
 % Linearized
-[linPos,linVel] = linearizer(0.5-MU1, sqrt(3)/2 , t, MU1, pnts, perturbation) ;
+[linPos,linVel] = linearizer(initP(1), initP(2) , t, MU1, pnts, perturbation) ;
 
 % plots nominal for L4 in B frame
 figure
