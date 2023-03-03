@@ -67,22 +67,6 @@ ylabel('departure velocity');
 
 % exportgraphics(ax,'L2_PerturbedVel.jpg')
 
-%{ 
-linear comparison plot L2
-figure
-subplot(2,1,1)
-plot(t,linPos);
-hold on 
-plot(t,departX(:,1));
-hold off
-title('Lagrange Point 2 perturbation vs linearized Position')
-xlabel('t')
-ylabel('Pos')
-legend('linear','perturbed')
-ax = gca ;
-exportgraphics(ax,'L2_LinearPos.jpg')
-%}
-
 % plots linearized solution and departure solution vs time
 figure
 subplot(2,1,1)
@@ -107,36 +91,6 @@ ylabel('Vel')
 legend('linear','departure')
 ax = gca ;
 
-%{ 
-linear comparison plot L2
-figure
-subplot(2,1,1)
-plot(t,linPos);
-hold on 
-plot(t,departX(:,1));
-hold off
-title('Lagrange Point 2 perturbation vs linearized Position')
-xlabel('t')
-ylabel('Pos')
-legend('linear','perturbed')
-ax = gca ;
-exportgraphics(ax,'L2_LinearPos.jpg')
-%}
-
-%{
-subplot(2,1,2)
-plot(t,linVel);
-hold on 
-plot(t,departX(:,1));
-hold off
-title('Lagrange Point 2 perturbation vs linearized Velocity')
-xlabel('t')
-ylabel('Vel')
-legend('linear','perturbed')
-ax = gca ;
-exportgraphics(ax,'L2_LinearVel.jpg')
-%}
-
 
 
 %% Lagrange Point 4
@@ -158,18 +112,11 @@ end
 initP = x0'+perturbation';
 options = odeset('reltol',1e-12,'abstol',1e-12);
 [t,xP] = ode45(@(t,x) odefun(t,x,MU1), t, initP , options);
-%{
-xP = x - xP ;
-departX(:,1) = sqrt(xP(:,1).^2+xP(:,2).^2);
-departX(:,2) = sqrt(xP(:,3).^2+xP(:,4).^2);
-%}
+
 deltax = xP - x;
 deltaxpos = sqrt((deltax(:,1)).^2+(deltax(:,2)).^2);
 deltaxvel = sqrt((deltax(:,3)).^2+(deltax(:,4)).^2);
-figure
-plot(t,deltaxpos);      % Plots departure postion vs time
-figure
-plot(t,deltaxvel);      % Plots departure velocity vs time
+
 
 % Linearized
 [linPos,linVel] = linearizer(initP(1), initP(2) , t, MU1, pnts, perturbation) ;
@@ -192,35 +139,26 @@ ylabel('YN(t)');
 ax = gca ;
 exportgraphics(ax,'L4_Nframe.jpg')
 
-% plots the perturbed case delta x for both position and velocity for L4
-%{
+% plots departure postion and velocity vs time
 figure
-subplot(2,1,1)
-plot (t, departX(:,1))
-title('Lagrange Point 4 pertubation position')
-xlabel('t')
-ylabel('delta x')
-ax = gca ;
-exportgraphics(ax,'L4_PerturbedPos.jpg')
-subplot(2,1,2)
-plot (t, departX(:,2))
-title('Lagrange Point 4 pertubation velocity')
-xlabel('t')
-ylabel('delta x')
-ax = gca ;
-exportgraphics(ax,'L4_PerturbedVel.jpg')
-%}
-
-
+plot(t,deltaxpos);      % Plots departure postion vs time
+xlabel('time');
+ylabel('departure position');
+title('Lagrange point 4, departure position vs time');
+figure
+plot(t,deltaxvel);      % Plots departure velocity vs time
+xlabel('time');
+ylabel('departure velocity');
+title('Lagrange point 4, departure velocity vs time');
 
 % linear comparison plot L4
 figure
 subplot(2,1,1)
 plot(t,linPos);
 hold on 
-plot(t,departX(:,1));
+plot(t,deltaxpos);
 hold off
-title('Lagrange Point 4 perturbation vs linearized Position')
+title('Lagrange Point 4 departure vs linearized Position')
 xlabel('t')
 ylabel('Pos')
 legend('linear','perturbed')
@@ -230,9 +168,9 @@ exportgraphics(ax,'L4_LinearPos.jpg')
 subplot(2,1,2)
 plot(t,linVel);
 hold on 
-plot(t,departX(:,1));
+plot(t,deltaxvel);
 hold off
-title('Lagrange Point 4 perturbation vs linearized Velocity')
+title('Lagrange Point 4 departure vs linearized Velocity')
 xlabel('t')
 ylabel('Vel')
 legend('linear','perturbed')
