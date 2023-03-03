@@ -27,7 +27,7 @@ options = odeset('reltol',1e-12,'abstol',1e-12);
 %xp = x - xP ;
 %departX(:,1) = sqrt(xP(:,1).^2+xP(:,2).^2);
 %departX(:,2) = sqrt(xP(:,3).^2+xP(:,4).^2);
-deltax = x - xP;
+deltax = xP - x;
 deltaxpos = sqrt((deltax(:,1)).^2+(deltax(:,2)).^2);
 deltaxvel = sqrt((deltax(:,3)).^2+(deltax(:,4)).^2);
 figure
