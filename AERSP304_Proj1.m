@@ -77,7 +77,8 @@ ax = gca ;
 
 exportgraphics(ax,'L2_PerturbedVel.jpg')
 
-% linear comparison plot L2
+%{ 
+linear comparison plot L2
 figure
 subplot(2,1,1)
 plot(t,linPos);
@@ -90,7 +91,47 @@ ylabel('Pos')
 legend('linear','perturbed')
 ax = gca ;
 exportgraphics(ax,'L2_LinearPos.jpg')
+%}
+figure
+subplot(2,1,1)
+plot(t,linPos);
+hold on 
+plot(t,deltaxpos);
+hold off
+title('Lagrange Point 2 perturbation vs linearized Position')
+xlabel('t')
+ylabel('Pos')
+legend('linear','perturbed')
+ax = gca ;
 
+subplot(2,1,2)
+plot(t,linVel);
+hold on 
+plot(t,deltaxvel);
+hold off
+title('Lagrange Point 2 perturbation vs linearized Velocity')
+xlabel('t')
+ylabel('Vel')
+legend('linear','perturbed')
+ax = gca ;
+
+%{ 
+linear comparison plot L2
+figure
+subplot(2,1,1)
+plot(t,linPos);
+hold on 
+plot(t,departX(:,1));
+hold off
+title('Lagrange Point 2 perturbation vs linearized Position')
+xlabel('t')
+ylabel('Pos')
+legend('linear','perturbed')
+ax = gca ;
+exportgraphics(ax,'L2_LinearPos.jpg')
+%}
+
+%{
 subplot(2,1,2)
 plot(t,linVel);
 hold on 
@@ -102,6 +143,8 @@ ylabel('Vel')
 legend('linear','perturbed')
 ax = gca ;
 exportgraphics(ax,'L2_LinearVel.jpg')
+%}
+
 
 
 %% Lagrange Point 4
@@ -172,7 +215,7 @@ plot(t,linPos);
 hold on 
 plot(t,departX(:,1));
 hold off
-title('Lagrange Point 2 perturbation vs linearized Position')
+title('Lagrange Point 4 perturbation vs linearized Position')
 xlabel('t')
 ylabel('Pos')
 legend('linear','perturbed')
@@ -184,7 +227,7 @@ plot(t,linVel);
 hold on 
 plot(t,departX(:,1));
 hold off
-title('Lagrange Point 2 perturbation vs linearized Velocity')
+title('Lagrange Point 4 perturbation vs linearized Velocity')
 xlabel('t')
 ylabel('Vel')
 legend('linear','perturbed')
