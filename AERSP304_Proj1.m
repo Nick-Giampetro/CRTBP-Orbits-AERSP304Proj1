@@ -38,11 +38,15 @@ plot(L2_t,L2_deltaXPos);      % Plots departure postion vs time
 title('Lagrange Point 2, departure position vs time');
 xlabel('time')
 ylabel('departure position')
+ax = gca ;
+exportgraphics(ax,'L2_PerturbedPos.jpg')
 subplot(2,1,2)
 plot(L2_t,L2_deltaXVel);      % Plots departure velocity vs time
 title('Lagrange 2, departure velocity vs time');
 xlabel('time');
 ylabel('departure velocity');
+ax = gca ;
+exportgraphics(ax,'L2_PerturbedVel.jpg')
 
 % plots linearized solution and departure solution vs time
 figure
@@ -56,6 +60,7 @@ xlabel('t')
 ylabel('Pos')
 legend('linear','departure')
 ax = gca ;
+exportgraphics(ax,'L2_LinearPos.jpg')
 subplot(2,1,2)
 plot(L2_t,L2_linVel);
 hold on 
@@ -66,6 +71,7 @@ xlabel('t')
 ylabel('Vel')
 legend('linear','departure')
 ax = gca ;
+exportgraphics(ax,'L2_LinearVel.jpg')
 
 
 
@@ -102,11 +108,15 @@ plot(L4_t,L4_deltaXPos);      % Plots departure postion vs time
 xlabel('time');
 ylabel('departure position');
 title('Lagrange point 4, departure position vs time');
+ax = gca ;
+exportgraphics(ax,'L4_PerturbedPos.jpg')
 subplot(2,1,2)
 plot(L4_t,L4_deltaXVel);      % Plots departure velocity vs time
 xlabel('time');
 ylabel('departure velocity');
 title('Lagrange point 4, departure velocity vs time');
+ax = gca ;
+exportgraphics(ax,'L4_PerturbedVel.jpg')
 
 % linear comparison plot L4
 figure
@@ -121,7 +131,6 @@ ylabel('Pos')
 legend('linear','perturbed')
 ax = gca ;
 exportgraphics(ax,'L4_LinearPos.jpg')
-
 subplot(2,1,2)
 plot(L4_t,L4_linVel);
 hold on 
