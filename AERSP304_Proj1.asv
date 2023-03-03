@@ -28,12 +28,7 @@ options = odeset('reltol',1e-12,'abstol',1e-12);
 %departX(:,1) = sqrt(xP(:,1).^2+xP(:,2).^2);
 %departX(:,2) = sqrt(xP(:,3).^2+xP(:,4).^2);
 deltax = x - xP;
-deltaxpos = sqrt((deltax(:,1)).^2+(deltax(:,2)).^2);
-deltaxvel = sqrt((deltax(:,3)).^2+(deltax(:,4)).^2);
-figure
-plot(t,deltaxpos);      % Plots departure postion vs time
-figure
-plot(t,deltaxvel);      % Plots departure velocity vs time
+
 
 % linearized
 [linPos,linVel] = linearizer(initP(1), initP(2), t, MU1, pnts, perturbation) ;
