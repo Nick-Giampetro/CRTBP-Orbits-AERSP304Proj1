@@ -30,10 +30,6 @@ options = odeset('reltol',1e-12,'abstol',1e-12);
 deltax = xP - x;
 deltaxpos = sqrt((deltax(:,1)).^2+(deltax(:,2)).^2);
 deltaxvel = sqrt((deltax(:,3)).^2+(deltax(:,4)).^2);
-figure
-plot(t,deltaxpos);      % Plots departure postion vs time
-figure
-plot(t,deltaxvel);      % Plots departure velocity vs time
 
 % linearized
 [linPos,linVel] = linearizer(initP(1), initP(2), t, MU1, pnts, perturbation) ;
@@ -57,25 +53,19 @@ ylabel('YN(t)');
 ax = gca ;
 exportgraphics(ax,'L2_Nframe.jpg')
 
-% plots the perturbed case delta x for both position and velocity for L2
-%{
+% plots L2 departure position and velocity vs time
 figure
-subplot(2,1,1)
-plot (t, departX(:,1))
-title('Lagrange Point 2 perturbation position')
-xlabel('t')
-ylabel('delta x')
-ax = gca ;
-exportgraphics(ax,'L2_PerturbedPos.jpg')
-subplot(2,1,2)
-plot (t, departX(:,2))
-title('Lagrange Point 2 perturbation velocity')
-xlabel('t')
-ylabel('delta x')
-ax = gca ;
-%}
+plot(t,deltaxpos);      % Plots departure postion vs time
+title('Lagrange Point 2, departure position vs time');
+xlabel('time')
+ylabel('departure position')
+figure
+plot(t,deltaxvel);      % Plots departure velocity vs time
+title('Lagrange 2, departure velocity vs time');
+xlabel('time');
+ylabel('departure velocity');
 
-exportgraphics(ax,'L2_PerturbedVel.jpg')
+% exportgraphics(ax,'L2_PerturbedVel.jpg')
 
 %{ 
 linear comparison plot L2
@@ -92,16 +82,18 @@ legend('linear','perturbed')
 ax = gca ;
 exportgraphics(ax,'L2_LinearPos.jpg')
 %}
+
+% plots linearized solution and departure solution vs time
 figure
 subplot(2,1,1)
 plot(t,linPos);
 hold on 
 plot(t,deltaxpos);
 hold off
-title('Lagrange Point 2 perturbation vs linearized Position')
+title('Lagrange Point 2 departure vs linearized Position')
 xlabel('t')
 ylabel('Pos')
-legend('linear','perturbed')
+legend('linear','departure')
 ax = gca ;
 
 subplot(2,1,2)
@@ -109,10 +101,10 @@ plot(t,linVel);
 hold on 
 plot(t,deltaxvel);
 hold off
-title('Lagrange Point 2 perturbation vs linearized Velocity')
+title('Lagrange Point 2 departure vs linearized Velocity')
 xlabel('t')
 ylabel('Vel')
-legend('linear','perturbed')
+legend('linear','departure')
 ax = gca ;
 
 %{ 
