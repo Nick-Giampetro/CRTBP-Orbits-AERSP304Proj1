@@ -24,35 +24,13 @@ end
 options = odeset('reltol',1e-12,'abstol',1e-12);
 [t,xP] = ode45(@(t,x) odefun(t,x,MU1), t, x0+perturbation' , options);
 xP = x - xP ;
-for i = 1:pnts
-    departX(i,1) = sqrt(xP(i,1)^2+xP(i,2)^2);
-    departX(i,2) = sqrt(xP(i,3)^2+xP(i,4)^2);
-end
+departX(:,1) = sqrt(xP(:,1).^2+xP(:,2).^2);
+departX(:,2) = sqrt(xP(:,3).^2+xP(:,4).^2);
+
 
 % linearized
- xlin = 1.15568;
- ylin = 0;
-    
- p1 = ((MU1+xlin)^2+ylin^2)^(1/2);
- p2 = ((1-MU1-xlin)^2+ylin^2)^(1/2);
-    
-Uxx = 1 - ((1-MU1)/(p1^3)) + (3*(1-MU1)*(xlin+MU1)^2)/(p1^5) + (3*MU1*(-xlin-MU1+1)^2)/(p2^5) - (MU1)/(p2^3);
-Uyy = 1 - (1-MU1)/(p1^3) + (3*(1-MU1)*ylin^2)/(p1^5) - (MU1)/(p2^3) + (3*MU1*ylin^2)/(p2^5);
-Uxy = (3*(1-MU1)*(xlin+MU1)*ylin)/(p1^5) - (3*MU1*ylin*(-xlin-MU1+1))/(p2^5);
+[linPos,linVel] = linearizer(1.15568, 0, t, MU1, pnts, perturbation) ;
  
-A = [0 0 1 0; 0 0 0 1; Uxx Uxy 0 2; Uxy Uyy -2 0];
-[eigvec eigval] = eig(A);
-const = eigvec\perturbation;
-
-tlin=zeros(pnts);
-Xlin=zeros(pnts,4);
-for i = 1:pnts
-    tlin(i) = t(i);
-    Xlin(i,:) = (const(1)*eigvec(:,1)*exp(eigval(1,1)*t(i))) + (const(2)*eigvec(:,2)*exp(eigval(2,2)*t(i))) + (const(3)*eigvec(:,3)*exp(eigval(3,3)*t(i))) + (const(4)*eigvec(:,4)*exp(eigval(4,4)*t(i)));
-end
-
-% linear pos calc
-linPos=sqrt(Xlin(:,1).^2+Xlin(:,2).^2);
 
 % plots nominal for L2 in B frame
 figure
@@ -79,6 +57,7 @@ plot (t, departX(:,1))
 title('Lagrange Point 2 perturbation position')
 xlabel('t')
 ylabel('delta x')
+ax = gca ;
 exportgraphics(ax,'L2_PerturbedPos.jpg')
 subplot(2,1,2)
 plot (t, departX(:,2))
@@ -88,18 +67,31 @@ ylabel('delta x')
 ax = gca ;
 exportgraphics(ax,'L2_PerturbedVel.jpg')
 
-% linear comparison plot
+% linear comparison plot L2
 figure
+subplot(2,1,1)
 plot(t,linPos);
 hold on 
 plot(t,departX(:,1));
 hold off
-title('Lagrange Point 2 perturbation vs linearized motion')
+title('Lagrange Point 2 perturbation vs linearized Position')
 xlabel('t')
 ylabel('Pos')
 legend('linear','perturbed')
 ax = gca ;
-exportgraphics(ax,'L2_Linear.jpg')
+exportgraphics(ax,'L2_LinearPos.jpg')
+
+subplot(2,1,2)
+plot(t,linVel);
+hold on 
+plot(t,departX(:,1));
+hold off
+title('Lagrange Point 2 perturbation vs linearized Velocity')
+xlabel('t')
+ylabel('Vel')
+legend('linear','perturbed')
+ax = gca ;
+exportgraphics(ax,'L2_LinearVel.jpg')
 
 
 %% Lagrange Point 4
@@ -121,14 +113,11 @@ end
 options = odeset('reltol',1e-12,'abstol',1e-12);
 [t,xP] = ode45(@(t,x) odefun(t,x,MU1), t, x0'+perturbation' , options);
 xP = x - xP ;
-for i = 1:pnts
-    departX(i,1) = sqrt(xP(i,1)^2+xP(i,2)^2);
-    departX(i,2) = sqrt(xP(i,3)^2+xP(i,4)^2);
-end
+departX(:,1) = sqrt(xP(:,1).^2+xP(:,2).^2);
+departX(:,2) = sqrt(xP(:,3).^2+xP(:,4).^2);
 
-
-% Linearize
-
+% Linearized
+[linPos,linVel] = linearizer(0.5-MU1, sqrt(3)/2 , t, MU1, pnts, perturbation) ;
 
 % plots nominal for L4 in B frame
 figure
@@ -155,6 +144,7 @@ plot (t, departX(:,1))
 title('Lagrange Point 4 pertubation position')
 xlabel('t')
 ylabel('delta x')
+ax = gca ;
 exportgraphics(ax,'L4_PerturbedPos.jpg')
 subplot(2,1,2)
 plot (t, departX(:,2))
@@ -164,7 +154,31 @@ ylabel('delta x')
 ax = gca ;
 exportgraphics(ax,'L4_PerturbedVel.jpg')
 
+% linear comparison plot L4
+figure
+subplot(2,1,1)
+plot(t,linPos);
+hold on 
+plot(t,departX(:,1));
+hold off
+title('Lagrange Point 2 perturbation vs linearized Position')
+xlabel('t')
+ylabel('Pos')
+legend('linear','perturbed')
+ax = gca ;
+exportgraphics(ax,'L4_LinearPos.jpg')
 
+subplot(2,1,2)
+plot(t,linVel);
+hold on 
+plot(t,departX(:,1));
+hold off
+title('Lagrange Point 2 perturbation vs linearized Velocity')
+xlabel('t')
+ylabel('Vel')
+legend('linear','perturbed')
+ax = gca ;
+exportgraphics(ax,'L4_LinearVel.jpg')
 
 %% Functions
 
@@ -185,4 +199,32 @@ function    xdot = odefun(t,x,MU1)
     x4dot = -2*x3 + Uy;
 
     xdot = [x1dot; x2dot; x3dot; x4dot];
+end
+
+function [pos,vel] = linearizer(initX, initY, t, MU1, pnts, perturbation)
+    xlin = initX;
+    ylin = initY;
+    
+    p1 = ((MU1+xlin)^2+ylin^2)^(1/2);
+    p2 = ((1-MU1-xlin)^2+ylin^2)^(1/2);
+    
+    Uxx = 1 - ((1-MU1)/(p1^3)) + (3*(1-MU1)*(xlin+MU1)^2)/(p1^5) + (3*MU1*(-xlin-MU1+1)^2)/(p2^5) - (MU1)/(p2^3);
+    Uyy = 1 - (1-MU1)/(p1^3) + (3*(1-MU1)*ylin^2)/(p1^5) - (MU1)/(p2^3) + (3*MU1*ylin^2)/(p2^5);
+    Uxy = (3*(1-MU1)*(xlin+MU1)*ylin)/(p1^5) - (3*MU1*ylin*(-xlin-MU1+1))/(p2^5);
+ 
+    A = [0 0 1 0; 0 0 0 1; Uxx Uxy 0 2; Uxy Uyy -2 0];
+    [eigvec, eigval] = eig(A);
+    const = eigvec\perturbation;
+
+    tlin=zeros(pnts);
+    Xlin=zeros(pnts,4);
+    
+    for i = 1:pnts
+        tlin(i) = t(i);
+        Xlin(i,:) = (const(1)*eigvec(:,1)*exp(eigval(1,1)*t(i))) + (const(2)*eigvec(:,2)*exp(eigval(2,2)*t(i))) + (const(3)*eigvec(:,3)*exp(eigval(3,3)*t(i))) + (const(4)*eigvec(:,4)*exp(eigval(4,4)*t(i)));
+    end
+
+    % linear pos calc
+    pos = sqrt(Xlin(:,1).^2+Xlin(:,2).^2);
+    vel = sqrt(Xlin(:,3).^2+Xlin(:,4).^2);
 end
