@@ -9,35 +9,32 @@ load('EM_L2-304P1');
 
 pnts = 1000;    % number of descretizations of time
 
-t = linspace(0,T,pnts);         % Set up our time step
+L2_t = linspace(0,T,pnts);         % Set up our time step
 
 options = odeset('reltol',1e-12,'abstol',1e-12);
-[t,x] = ode45(@(t,x) odefun(t,x,MU1), t, x0, options);
+[L2_t,L2_x] = ode45(@(L2_t,L2_x) odefun(L2_t,L2_x,MU1), L2_t, x0, options);
 
 % Convert to Inertial Frame
 for i = 1:pnts
-XI(i) = cos(t(i))*x(i,1)-sin(t(i))*x(i,2);
-YI(i) = sin(t(i))*x(i,1)+cos(t(i))*x(i,2);
+L2_XI(i) = cos(L2_t(i))*L2_x(i,1)-sin(L2_t(i))*L2_x(i,2);
+L2_YI(i) = sin(L2_t(i))*L2_x(i,1)+cos(L2_t(i))*L2_x(i,2);
 end
 
 % Perturbed Solution
-initP = x0+perturbation';
+L2_initP = x0+perturbation';
 options = odeset('reltol',1e-12,'abstol',1e-12);
-[t,xP] = ode45(@(t,x) odefun(t,x,MU1), t, initP, options);
-%xp = x - xP ;
-%departX(:,1) = sqrt(xP(:,1).^2+xP(:,2).^2);
-%departX(:,2) = sqrt(xP(:,3).^2+xP(:,4).^2);
-deltax = xP - x;
-deltaxpos = sqrt((deltax(:,1)).^2+(deltax(:,2)).^2);
-deltaxvel = sqrt((deltax(:,3)).^2+(deltax(:,4)).^2);
+[L2_t,xP] = ode45(@(t,x) odefun(t,x,MU1), L2_t, L2_initP, options);
+L2_deltaX = xP - L2_x;
+L2_deltaXPos = sqrt((L2_deltaX(:,1)).^2+(L2_deltaX(:,2)).^2);
+L2_deltaXVel = sqrt((L2_deltaX(:,3)).^2+(L2_deltaX(:,4)).^2);
 
 % linearized
-[linPos,linVel] = linearizer(initP(1), initP(2), t, MU1, pnts, perturbation) ;
+[L2_linPos,L2_linVel] = linearizer(L2_initP(1), L2_initP(2), L2_t, MU1, pnts, perturbation) ;
  
 
 % plots nominal for L2 in B frame
 figure
-plot(x(:,1),x(:,2));
+plot(L2_x(:,1),L2_x(:,2));
 title('yN(t) vs. xN(t), Nominal, Lagrange Point 2');
 xlabel('xN(t)');
 ylabel('yN(t)');
@@ -46,7 +43,7 @@ exportgraphics(ax,'L2_Bframe.jpg')
 
 % plots L2 in inertial frame
 figure
-plot(XI,YI)
+plot(L2_XI,L2_YI)
 title('Lagrange Point 2 in Inertial Frame')
 xlabel('XN(t)');
 ylabel('YN(t)');
@@ -55,12 +52,13 @@ exportgraphics(ax,'L2_Nframe.jpg')
 
 % plots L2 departure position and velocity vs time
 figure
-plot(t,deltaxpos);      % Plots departure postion vs time
+subplot(2,1,1)
+plot(L2_t,L2_deltaXPos);      % Plots departure postion vs time
 title('Lagrange Point 2, departure position vs time');
 xlabel('time')
 ylabel('departure position')
-figure
-plot(t,deltaxvel);      % Plots departure velocity vs time
+subplot(2,1,2)
+plot(L2_t,L2_deltaXVel);      % Plots departure velocity vs time
 title('Lagrange 2, departure velocity vs time');
 xlabel('time');
 ylabel('departure velocity');
@@ -70,9 +68,9 @@ ylabel('departure velocity');
 % plots linearized solution and departure solution vs time
 figure
 subplot(2,1,1)
-plot(t,linPos);
+plot(L2_t,L2_linPos);
 hold on 
-plot(t,deltaxpos);
+plot(L2_t,L2_deltaXPos);
 hold off
 title('Lagrange Point 2 departure vs linearized Position')
 xlabel('t')
@@ -81,9 +79,9 @@ legend('linear','departure')
 ax = gca ;
 
 subplot(2,1,2)
-plot(t,linVel);
+plot(L2_t,L2_linVel);
 hold on 
-plot(t,deltaxvel);
+plot(L2_t,L2_deltaXVel);
 hold off
 title('Lagrange Point 2 departure vs linearized Velocity')
 xlabel('t')
@@ -97,33 +95,32 @@ ax = gca ;
 
 load('EM_L4-304P1')
 
-t = linspace(0,T,pnts);         % Set up our time step
+L4_t = linspace(0,T,pnts);         % Set up our time step
 
 options = odeset('reltol',1e-12,'abstol',1e-12);
-[t,x] = ode45(@(t,x) odefun(t,x,MU1), t, x0, options);
+[L4_t,L4_x] = ode45(@(L4_t,L4_x) odefun(L4_t,L4_x,MU1), L4_t, x0, options);
 
 % Convert to Inertial Frame
 for i = 1:pnts
-XI(i) = cos(t(i))*x(i,1)-sin(t(i))*x(i,2);
-YI(i) = sin(t(i))*x(i,1)+cos(t(i))*x(i,2);
+L4_XI(i) = cos(L4_t(i))*L4_x(i,1)-sin(L4_t(i))*L4_x(i,2);
+L4_YI(i) = sin(L4_t(i))*L4_x(i,1)+cos(L4_t(i))*L4_x(i,2);
 end
 
 % Perturbed Solution
-initP = x0'+perturbation';
+L4_initP = x0'+perturbation';
 options = odeset('reltol',1e-12,'abstol',1e-12);
-[t,xP] = ode45(@(t,x) odefun(t,x,MU1), t, initP , options);
-
-deltax = xP - x;
-deltaxpos = sqrt((deltax(:,1)).^2+(deltax(:,2)).^2);
-deltaxvel = sqrt((deltax(:,3)).^2+(deltax(:,4)).^2);
+[L4_t,xP] = ode45(@(t,x) odefun(t,x,MU1), L4_t, L4_initP , options);
+L4_deltaX = xP - L4_x;
+L4_deltaXPos = sqrt((L4_deltaX(:,1)).^2+(L4_deltaX(:,2)).^2);
+L4_deltaXVel = sqrt((L4_deltaX(:,3)).^2+(L4_deltaX(:,4)).^2);
 
 
 % Linearized
-[linPos,linVel] = linearizer(initP(1), initP(2) , t, MU1, pnts, perturbation) ;
+[L4_linPos,L4_linVel] = linearizer(L4_initP(1), L4_initP(2) , L4_t, MU1, pnts, perturbation) ;
 
 % plots nominal for L4 in B frame
 figure
-plot(x(:,1),x(:,2))
+plot(L4_x(:,1),L4_x(:,2))
 title('yN(t) vs. xN(t), Nominal, Lagrange Point 4');
 xlabel('xN(t)');
 ylabel('yN(t)');
@@ -132,7 +129,7 @@ exportgraphics(ax,'L4_Bframe.jpg')
 
 % plots L4 in inertial frame
 figure
-plot(XI,YI)
+plot(L4_XI,L4_YI)
 title('Lagrange Point 4 in Inertial Frame')
 xlabel('XN(t)');
 ylabel('YN(t)');
@@ -141,12 +138,13 @@ exportgraphics(ax,'L4_Nframe.jpg')
 
 % plots departure postion and velocity vs time
 figure
-plot(t,deltaxpos);      % Plots departure postion vs time
+subplot(2,1,1)
+plot(L4_t,L4_deltaXPos);      % Plots departure postion vs time
 xlabel('time');
 ylabel('departure position');
 title('Lagrange point 4, departure position vs time');
-figure
-plot(t,deltaxvel);      % Plots departure velocity vs time
+subplot(2,1,2)
+plot(L4_t,L4_deltaXVel);      % Plots departure velocity vs time
 xlabel('time');
 ylabel('departure velocity');
 title('Lagrange point 4, departure velocity vs time');
@@ -154,9 +152,9 @@ title('Lagrange point 4, departure velocity vs time');
 % linear comparison plot L4
 figure
 subplot(2,1,1)
-plot(t,linPos);
+plot(L4_t,L4_linPos);
 hold on 
-plot(t,deltaxpos);
+plot(L4_t,L4_deltaXPos);
 hold off
 title('Lagrange Point 4 departure vs linearized Position')
 xlabel('t')
@@ -166,9 +164,9 @@ ax = gca ;
 exportgraphics(ax,'L4_LinearPos.jpg')
 
 subplot(2,1,2)
-plot(t,linVel);
+plot(L4_t,L4_linVel);
 hold on 
-plot(t,deltaxvel);
+plot(L4_t,L4_deltaXVel);
 hold off
 title('Lagrange Point 4 departure vs linearized Velocity')
 xlabel('t')
