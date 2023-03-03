@@ -11,26 +11,7 @@ pnts = 1000;    % number of descretizations of time
 
 L2_t = linspace(0,T,pnts);         % Set up our time step
 
-options = odeset('reltol',1e-12,'abstol',1e-12);
-[L2_t,L2_x] = ode45(@(L2_t,L2_x) odefun(L2_t,L2_x,MU1), L2_t, x0, options);
-
-% Convert to Inertial Frame
-for i = 1:pnts
-L2_XI(i) = cos(L2_t(i))*L2_x(i,1)-sin(L2_t(i))*L2_x(i,2);
-L2_YI(i) = sin(L2_t(i))*L2_x(i,1)+cos(L2_t(i))*L2_x(i,2);
-end
-
-% Perturbed Solution
-L2_initP = x0+perturbation';
-options = odeset('reltol',1e-12,'abstol',1e-12);
-[L2_t,xP] = ode45(@(t,x) odefun(t,x,MU1), L2_t, L2_initP, options);
-L2_deltaX = xP - L2_x;
-L2_deltaXPos = sqrt((L2_deltaX(:,1)).^2+(L2_deltaX(:,2)).^2);
-L2_deltaXVel = sqrt((L2_deltaX(:,3)).^2+(L2_deltaX(:,4)).^2);
-
-% linearized
-[L2_linPos,L2_linVel] = linearizer(L2_initP(1), L2_initP(2), L2_t, MU1, pnts, perturbation) ;
- 
+[L2_t, L2_x, L2_XI, L2_YI, L2_deltaXPos, L2_deltaXVel, L2_linPos, L2_linVel] = dataGen(L2_t, pnts, MU1, x0, perturbation);
 
 % plots nominal for L2 in B frame
 figure
@@ -63,8 +44,6 @@ title('Lagrange 2, departure velocity vs time');
 xlabel('time');
 ylabel('departure velocity');
 
-% exportgraphics(ax,'L2_PerturbedVel.jpg')
-
 % plots linearized solution and departure solution vs time
 figure
 subplot(2,1,1)
@@ -77,7 +56,6 @@ xlabel('t')
 ylabel('Pos')
 legend('linear','departure')
 ax = gca ;
-
 subplot(2,1,2)
 plot(L2_t,L2_linVel);
 hold on 
@@ -97,26 +75,7 @@ load('EM_L4-304P1')
 
 L4_t = linspace(0,T,pnts);         % Set up our time step
 
-options = odeset('reltol',1e-12,'abstol',1e-12);
-[L4_t,L4_x] = ode45(@(L4_t,L4_x) odefun(L4_t,L4_x,MU1), L4_t, x0, options);
-
-% Convert to Inertial Frame
-for i = 1:pnts
-L4_XI(i) = cos(L4_t(i))*L4_x(i,1)-sin(L4_t(i))*L4_x(i,2);
-L4_YI(i) = sin(L4_t(i))*L4_x(i,1)+cos(L4_t(i))*L4_x(i,2);
-end
-
-% Perturbed Solution
-L4_initP = x0'+perturbation';
-options = odeset('reltol',1e-12,'abstol',1e-12);
-[L4_t,xP] = ode45(@(t,x) odefun(t,x,MU1), L4_t, L4_initP , options);
-L4_deltaX = xP - L4_x;
-L4_deltaXPos = sqrt((L4_deltaX(:,1)).^2+(L4_deltaX(:,2)).^2);
-L4_deltaXVel = sqrt((L4_deltaX(:,3)).^2+(L4_deltaX(:,4)).^2);
-
-
-% Linearized
-[L4_linPos,L4_linVel] = linearizer(L4_initP(1), L4_initP(2) , L4_t, MU1, pnts, perturbation) ;
+[L4_t, L4_x, L4_XI, L4_YI, L4_deltaXPos, L4_deltaXVel, L4_linPos, L4_linVel] = dataGen(L4_t, pnts, MU1, x0', perturbation);
 
 % plots nominal for L4 in B frame
 figure
@@ -176,6 +135,28 @@ ax = gca ;
 exportgraphics(ax,'L4_LinearVel.jpg')
 
 %% Functions
+function [t, x, XI, YI, deltaXPos, deltaXVel, linPos, linVel] = dataGen(t, pnts, MU1, x0, perturbation)
+    options = odeset('reltol',1e-12,'abstol',1e-12);
+    [t,x] = ode45(@(t,x) odefun(t,x,MU1), t, x0, options);
+
+    % Convert to Inertial Frame
+    for i = 1:pnts
+    XI(i) = cos(t(i))*x(i,1)-sin(t(i))*x(i,2);
+    YI(i) = sin(t(i))*x(i,1)+cos(t(i))*x(i,2);
+    end
+
+    % Perturbed Solution
+    initP = x0+perturbation';
+    options = odeset('reltol',1e-12,'abstol',1e-12);
+    [t,xP] = ode45(@(t,x) odefun(t,x,MU1), t, initP, options);
+    deltaX = xP - x;
+    deltaXPos = sqrt((deltaX(:,1)).^2+(deltaX(:,2)).^2);
+    deltaXVel = sqrt((deltaX(:,3)).^2+(deltaX(:,4)).^2);
+
+    % linearized
+    [linPos,linVel] = linearizer(initP(1), initP(2), t, MU1, pnts, perturbation) ;
+end 
+
 
 function    xdot = odefun(t,x,MU1)
     x1 = x(1);              
