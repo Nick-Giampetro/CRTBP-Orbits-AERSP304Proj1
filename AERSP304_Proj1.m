@@ -166,9 +166,18 @@ end
 initP = x0'+perturbation';
 options = odeset('reltol',1e-12,'abstol',1e-12);
 [t,xP] = ode45(@(t,x) odefun(t,x,MU1), t, initP , options);
+%{
 xP = x - xP ;
 departX(:,1) = sqrt(xP(:,1).^2+xP(:,2).^2);
 departX(:,2) = sqrt(xP(:,3).^2+xP(:,4).^2);
+%}
+deltax = xP - x;
+deltaxpos = sqrt((deltax(:,1)).^2+(deltax(:,2)).^2);
+deltaxvel = sqrt((deltax(:,3)).^2+(deltax(:,4)).^2);
+figure
+plot(t,deltaxpos);      % Plots departure postion vs time
+figure
+plot(t,deltaxvel);      % Plots departure velocity vs time
 
 % Linearized
 [linPos,linVel] = linearizer(initP(1), initP(2) , t, MU1, pnts, perturbation) ;
@@ -192,6 +201,7 @@ ax = gca ;
 exportgraphics(ax,'L4_Nframe.jpg')
 
 % plots the perturbed case delta x for both position and velocity for L4
+%{
 figure
 subplot(2,1,1)
 plot (t, departX(:,1))
@@ -207,6 +217,9 @@ xlabel('t')
 ylabel('delta x')
 ax = gca ;
 exportgraphics(ax,'L4_PerturbedVel.jpg')
+%}
+
+
 
 % linear comparison plot L4
 figure
