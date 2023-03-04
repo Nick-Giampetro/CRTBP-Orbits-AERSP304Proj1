@@ -1,4 +1,4 @@
-# Lyapunov-Orbit-AERSP304Proj1
+# CRTBP-Orbits-AERSP304Proj1
 AERSP 304 Project 1
 
 Project by Nicholas Giampetro, Craig Stenstrom, Payton Glynn
